@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Popular Movies Stage2</string>
+    <string name="label_movie_title">Movie Title</string>
+    <string name="label_release_date">Release Date</string>
+    <string name="label_rating">Rating</string>
+    <string name="label_overview">Plot Synopsis</string>
+    <string name="label_trailers">Trailers</string>
+    <string name="label_reviews">Reviews</string>
+
+    <string name="error_message">An error has occured. Please try again by clicking REFRESH</string>
+
+    <!-- Strings related to settings -->
+    <string name="label_action_settings">Settings</string>
+
+    <!-- Pref related settings -->
+    <string name="pref_sort_by_label">Sort By</string>
+    <string name="pref_sort_by_label_popularity">Most Popular</string>
+    <string name="pref_sort_by_label_rating">Top Rated</string>
+    <string name="pref_sort_by_key" translatable="false">sort_by</string>
+    <string name="pref_sort_by_default_value" translatable="false">popularity.desc</string>
+    <string name="pref_sort_by_popularity_value" translatable="false">popularity.desc</string>
+    <string name="pref_sort_by_rating_value" translatable="false">vote_average.desc</string>
+
+</resources>
