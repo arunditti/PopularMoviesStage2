@@ -2,6 +2,7 @@ package com.arunditti.android.popularmoviesstage2.utils;
 
 import android.net.Uri;
 import android.util.Log;
+import android.view.MenuInflater;
 
 import com.arunditti.android.popularmoviesstage2.BuildConfig;
 
@@ -20,6 +21,7 @@ public class NetworkUtils {
 
     private static final String MOVIE_BASE_URL = "https://api.themoviedb.org/3/discover/movie?";
     private static final String SORT_BY = "sort_by";
+    private static final String MOVIE_REVIEW_PATH = "/reviews";
     private static final String  API_KEY = "api_key";
 
     //Format we want our API to return
@@ -38,7 +40,25 @@ public class NetworkUtils {
             e.printStackTrace();
         }
 
-        Log.v(TAG, "Built URI" + url);
+        Log.v(TAG, "Built URI: " + url);
+        return url;
+    }
+
+    //Build the URL for movie reviews
+
+  
+    public static URL buildReviewUrl(String movieId) {
+        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendQueryParameter(movieId, MOVIE_REVIEW_PATH)
+                .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Log.v(TAG, "Built URI for reviews: " + url);
         return url;
     }
 

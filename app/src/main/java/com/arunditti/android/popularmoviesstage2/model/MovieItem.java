@@ -15,14 +15,16 @@ public class MovieItem implements Parcelable {
     public String mOverview;
     public String mRating;
     public String mImagePath;
+    public String mBackdropPath;
 
-    public MovieItem(String id, String title, String releaseDate, String movieOverview, String rating, String imagePath) {
+    public MovieItem(String id, String title, String releaseDate, String movieOverview, String rating, String imagePath, String backdropPath) {
         this.movieId = id;
         this.mMovieTitle = title;
         this.mMovieReleaseDate = releaseDate;
         this.mOverview = movieOverview;
         this.mImagePath = imagePath;
         this.mRating = rating;
+        this.mBackdropPath = backdropPath;
     }
 
     public MovieItem(Parcel in) {
@@ -32,6 +34,7 @@ public class MovieItem implements Parcelable {
         mOverview = in.readString();
         mImagePath = in.readString();
         mRating = in.readString();
+        mBackdropPath = in.readString();
     }
 
     @Override
@@ -40,7 +43,7 @@ public class MovieItem implements Parcelable {
     }
 
     public String toString() {
-        return movieId + mMovieTitle + mMovieReleaseDate + mOverview + mImagePath + mRating;
+        return movieId + mMovieTitle + mMovieReleaseDate + mOverview + mImagePath + mRating + mBackdropPath;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class MovieItem implements Parcelable {
         dest.writeString(mOverview);
         dest.writeString(mImagePath);
         dest.writeString(mRating);
+        dest.writeString(mBackdropPath);
     }
 
     public static final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
@@ -87,5 +91,9 @@ public class MovieItem implements Parcelable {
 
     public String getmRating() {
         return mRating;
+    }
+
+    public String getBackdropPath() {
+        return mBackdropPath;
     }
 }

@@ -21,7 +21,8 @@ import android.widget.Toast;
 
 import com.arunditti.android.popularmoviesstage2.R;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
-import com.arunditti.android.popularmoviesstage2.ui.MovieAdapter.MovieAdapterOnClickHandler;
+import com.arunditti.android.popularmoviesstage2.ui.adapters.MovieAdapter;
+import com.arunditti.android.popularmoviesstage2.ui.adapters.MovieAdapter.MovieAdapterOnClickHandler;
 import com.arunditti.android.popularmoviesstage2.utils.JsonUtils;
 import com.arunditti.android.popularmoviesstage2.utils.MoviePreferences;
 import com.arunditti.android.popularmoviesstage2.utils.NetworkUtils;
