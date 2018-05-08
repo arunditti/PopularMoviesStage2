@@ -1,9 +1,11 @@
 package com.arunditti.android.popularmoviesstage2.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
 import com.arunditti.android.popularmoviesstage2.model.Review;
+import com.arunditti.android.popularmoviesstage2.model.Trailer;
 import com.arunditti.android.popularmoviesstage2.ui.DetailActivity;
 import com.arunditti.android.popularmoviesstage2.ui.MainActivity;
 
@@ -84,5 +86,42 @@ public class JsonUtils {
 
         return reviewItems;
     }
+
+    private ArrayList<Trailer> getTrailerDataFromJson(String TrailerJsonStr)
+            throws JSONException {
+
+        // These are the names of the JSON objects that need to be extracted.
+        final String TRAILER_RESULTS = "results";
+        final String MOVIE_ID = "id";
+        final String TRAILER_KEY = "key";
+        final String TRAILER_NAME = "name";
+
+        ArrayList<Trailer> resultMovieTrailers = new ArrayList<Trailer>();
+        JSONObject TrailerJson = new JSONObject(TrailerJsonStr);
+        JSONArray trailersArray = TrailerJson.getJSONArray(TRAILER_RESULTS);
+
+        resultMovieTrailers.clear();
+        for (int i = 0; i < trailersArray.length(); i++) {
+            JSONObject movieTrailerJson = trailersArray.getJSONObject(i);
+            String id = movieTrailerJson.getString(MOVIE_ID);
+            String key = movieTrailerJson.getString(TRAILER_KEY);
+            String name= movieTrailerJson.getString(TRAILER_NAME);
+            //  String site= movieTrailerJson.getString(TRAILER_SITE);
+            //String size= movieTrailerJson.getString(TRAILER_SIZE);
+            //String type = movieTrailerJson.getString(TRAILER_TYPE);
+            // movieTrailers.add(new MovieTrailer(id, key, name, site, size, type));
+            Trailer mT = new Trailer(id, key, name);
+            resultMovieTrailers.add(mT);
+        }
+
+        for (Trailer s : resultMovieTrailers) {
+            Log.v(LOG_TAG, "Trailer Entry: " + s);
+            Log.v(LOG_TAG, "Key: " + s.getKey());
+        }
+
+        return resultMovieTrailers;
+
+    }
+
 
 }

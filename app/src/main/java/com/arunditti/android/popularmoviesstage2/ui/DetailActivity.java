@@ -42,7 +42,7 @@ public class DetailActivity extends AppCompatActivity implements
     private ReviewAdapter mReviewAdapter;
 
     private TextView mErrorMessageDisplay;
-    private Toast mToast;
+
     private ProgressBar mLoadingIndicator;
 
     ArrayList<Review> mReviewItems = new ArrayList<Review>();
@@ -73,7 +73,7 @@ public class DetailActivity extends AppCompatActivity implements
 
         mReviewRecyclerView = mDetailBinding.rvReviews;
 
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mReviewRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         //mAdapter = new ReviewAdapter(this, null, mReviewItems);
@@ -91,8 +91,7 @@ public class DetailActivity extends AppCompatActivity implements
 
         LoaderCallbacks<ArrayList<Review>> callbacks = DetailActivity.this;
 
-        //Ensure a loader is initialized and active. If the loader doesn't already exist, one is created and starts the loader. Othe
-        getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callbacks);
+        getSupportLoaderManager().restartLoader(loaderId, bundleForLoader, callbacks);
 
     }
 
@@ -119,7 +118,7 @@ public class DetailActivity extends AppCompatActivity implements
 
                 String movieId = mCurrentMovieItem.getItemId();
                 Log.d(LOG_TAG, "Movie ID is : " + movieId);
-                URL ReviewRequestUrl = NetworkUtils.buildReviewUrl(movieId);
+                URL ReviewRequestUrl = NetworkUtils.buildReviewAndTrailerUrl(movieId);
 
                 try {
                     String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(ReviewRequestUrl);

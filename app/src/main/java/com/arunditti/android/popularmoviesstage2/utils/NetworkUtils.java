@@ -20,8 +20,11 @@ public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static final String MOVIE_BASE_URL = "https://api.themoviedb.org/3/discover/movie?";
+
+    final static String APPEND_TO_RESPONSE_PARAM = "append_to_response";
+    private static final String TMDB_MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/";
+
     private static final String SORT_BY = "sort_by";
-    private static final String MOVIE_REVIEW_PATH = "/reviews";
     private static final String  API_KEY = "api_key";
 
     //Format we want our API to return
@@ -47,10 +50,11 @@ public class NetworkUtils {
     //Build the URL for movie reviews
 
   
-    public static URL buildReviewUrl(String movieId) {
-        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                .appendQueryParameter(movieId, MOVIE_REVIEW_PATH)
+    public static URL buildReviewAndTrailerUrl(String movieId) {
+        Uri builtUri = Uri.parse(TMDB_MOVIES_BASE_URL).buildUpon()
+                .appendPath(movieId)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
+                .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "reviews, videos")
                 .build();
         URL url = null;
         try {
@@ -58,10 +62,9 @@ public class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        Log.v(TAG, "Built URI for reviews: " + url);
+        Log.v(TAG, "Built URI for reviews and trailers: " + url);
         return url;
     }
-
 
     //This method return the entire result from the HTTP response
     public static String getResponseFromHttpUrl(URL url) throws IOException {

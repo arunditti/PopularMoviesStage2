@@ -128,7 +128,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_trailers"/>
+                            android:text="@string/label_trailers"
+                            android:textStyle="bold"/>
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_trailers"
                             android:layout_width="match_parent"
@@ -145,7 +146,8 @@
                             android:id="@+id/movie_reviews"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_reviews"/>
+                            android:text="@string/label_reviews"
+                            android:textStyle="bold"/>
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/rv_reviews"
                             android:layout_width="match_parent"
