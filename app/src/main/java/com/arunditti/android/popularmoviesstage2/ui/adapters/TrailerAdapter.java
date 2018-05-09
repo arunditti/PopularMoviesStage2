@@ -3,13 +3,16 @@ package com.arunditti.android.popularmoviesstage2.ui.adapters;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arunditti.android.popularmoviesstage2.R;
 import com.arunditti.android.popularmoviesstage2.model.Trailer;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -19,9 +22,15 @@ import java.util.ArrayList;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterViewHolder> {
 
-    private static final String TAG = TrailerAdapter.class.getSimpleName();
+    private static final String LOG_TAG = TrailerAdapter.class.getSimpleName();
 
-    private ArrayList<Trailer> mTrailerItems;
+    public static final String YOU_TUBE_VIDEO_URL = "http://www.youtube.com/watch?v=";
+    public static final String YOUTUBE_URI = "vnd.youtube:";
+    final String TRAILER_KEY = "key";
+    private static final String YOUTUBE_IMAGE_URL_PREFIX = "http://img.youtube.com/vi/";
+    private static final String YOUTUBE_IMAGE_URL_SUFFIX = "/0.jpg";
+
+    public ArrayList<Trailer> mTrailerItems;
 
     private final TrailerAdapterOnClickHandler mClickHandler;
     private final Context mContext;
@@ -48,7 +57,14 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     @Override
     public void onBindViewHolder(final TrailerAdapterViewHolder holder, int position) {
 
-        holder.trailerName.setText(mTrailerItems.get(position).getTrailerName());
+        String trailerThumbnailUrl = YOUTUBE_IMAGE_URL_PREFIX + mTrailerItems.get(position) + YOUTUBE_IMAGE_URL_SUFFIX;
+        Log.d(LOG_TAG, trailerThumbnailUrl);
+        Picasso.with(mContext)
+                .load(mTrailerItems.get(position).getTrailerImage())
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_foreground)
+                .fit()
+                .into(holder.trailerImageView);
     }
 
     @Override
@@ -60,13 +76,13 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
 
-        TextView trailerName;
+        ImageView trailerImageView;
 
         public TrailerAdapterViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.cv) ;
 
-            trailerName = itemView.findViewById(R.id.trailer_title);
+            trailerImageView = itemView.findViewById(R.id.trailer_image);
             itemView.setOnClickListener(this);
         }
 

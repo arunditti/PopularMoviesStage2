@@ -8,32 +8,24 @@ import android.os.Parcelable;
  */
 
 public class Trailer implements Parcelable {
-    public static final String SITE_YOUTUBE = "YouTube";
-    public static final String TYPE_TRAILER = "Trailer";
 
     String movieId;
     String mKey;
     String mName;
-    //String mSite;
-    //String mSize;
-    // String mType;
+    String mSite;
 
-    // public MovieTrailer(String id, String key, String name, String site, String size, String type) {
-    public Trailer(String id, String key, String name) {
+    public Trailer(String id, String key, String name, String site) {
         this.movieId = id;
         this.mKey = key;
         this.mName = name;
-        // this.mSite = site;
-        //this.mSize = size;
-        //this.mType = type;
+        this.mSite = site;
     }
 
     public Trailer(Parcel in) {
         movieId = in.readString();
         mKey = in.readString();
         mName = in.readString();
-        // mSite = in.readString();
-        //mSize = in.readString();
+        mSite = in.readString();
     }
 
     @Override
@@ -42,8 +34,7 @@ public class Trailer implements Parcelable {
     }
 
     public String toString() {
-        //return mId + mKey + mName + mSite + mSize;
-        return movieId + mKey + mName;
+        return movieId + mKey + mName + mSite;
     }
 
     @Override
@@ -51,8 +42,7 @@ public class Trailer implements Parcelable {
         dest.writeString(movieId);
         dest.writeString(mKey);
         dest.writeString(mName);
-        // dest.writeString(mSite);
-        //dest.writeString(mSize);
+        dest.writeString(mSite);
     }
 
     public static final Parcelable.Creator<Trailer> CREATOR = new Parcelable.Creator<Trailer>() {
@@ -85,6 +75,14 @@ public class Trailer implements Parcelable {
 
     public void setTrailerName(String mName) {
         this.mName = mName;
+    }
+
+    public String getSite() {
+        return mSite;
+    }
+
+    public void setSite(String site) {
+        this.mSite = site;
     }
 
     public String getTrailerImage() {

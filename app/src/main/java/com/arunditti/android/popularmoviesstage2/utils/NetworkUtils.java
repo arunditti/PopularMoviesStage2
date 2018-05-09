@@ -30,7 +30,7 @@ public class NetworkUtils {
     //Format we want our API to return
     private static final String format = "json";
 
-    //Build the URL
+    //Build the URL for movies
     public static URL buildUrl(String movieQuery) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendQueryParameter(SORT_BY, movieQuery)
@@ -47,14 +47,12 @@ public class NetworkUtils {
         return url;
     }
 
-    //Build the URL for movie reviews
-
-  
-    public static URL buildReviewAndTrailerUrl(String movieId) {
+  //Build the URL for movie reviews
+    public static URL buildReviewUrl(String movieId) {
         Uri builtUri = Uri.parse(TMDB_MOVIES_BASE_URL).buildUpon()
                 .appendPath(movieId)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
-                .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "reviews, videos")
+                .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "reviews")
                 .build();
         URL url = null;
         try {
@@ -63,6 +61,23 @@ public class NetworkUtils {
             e.printStackTrace();
         }
         Log.v(TAG, "Built URI for reviews and trailers: " + url);
+        return url;
+    }
+
+    //Build the URL for movie trailers
+    public static URL buildTrailerUrl(String movieId) {
+        Uri builtUri = Uri.parse(TMDB_MOVIES_BASE_URL).buildUpon()
+                .appendPath(movieId)
+                .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
+                .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "videos")
+                .build();
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Log.v(TAG, "Built URI for trailers: " + url);
         return url;
     }
 

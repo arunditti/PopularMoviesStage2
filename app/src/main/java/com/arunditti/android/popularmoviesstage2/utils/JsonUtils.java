@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.SimpleTimeZone;
 
 /**
  * Created by arunditti on 5/2/18.
@@ -35,7 +36,7 @@ public class JsonUtils {
         final String PMD_OVERVIEW = "overview";
         final String PMD_RATING = "vote_average";
         final String PMD_RELEASE_DATE = "release_date";
-        final String PMD_PICTURE_SIZE    = "w185";
+        final String PMD_PICTURE_SIZE = "w185";
 
         JSONObject PopularMoviesJson = new JSONObject(PopularMoviesJsonStr);
         JSONArray moviesArray = PopularMoviesJson.getJSONArray(PMD_LIST);
@@ -47,8 +48,8 @@ public class JsonUtils {
             String movieId = popularMovies.getString(PMD_ID);
             String title = popularMovies.getString(PMD_TITLE);
             String releaseDate = popularMovies.getString(PMD_RELEASE_DATE);
-            String movieOverview= popularMovies.getString(PMD_OVERVIEW);
-            String rating= popularMovies.getString(PMD_RATING);
+            String movieOverview = popularMovies.getString(PMD_OVERVIEW);
+            String rating = popularMovies.getString(PMD_RATING);
             String imagePath = PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
             String backdropPath = PMD_BACKDROP_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
             movieItems.add(new MovieItem(movieId, title, releaseDate, movieOverview, rating, imagePath, backdropPath));
@@ -59,7 +60,7 @@ public class JsonUtils {
     }
 
     public static ArrayList<Review> getMovieReviewsDataFromJson(String reviewsJsonStr)
-        throws JSONException {
+            throws JSONException {
 
         //These are the names of the Json objects that need to be extracted
         final String PMD_ID = "id";
@@ -70,12 +71,12 @@ public class JsonUtils {
         final String REVIEW_URL = "url";
 
         JSONObject ReviewJson = new JSONObject(reviewsJsonStr);
-    JSONObject reviewDataJson = ReviewJson.getJSONObject("reviews");
+        JSONObject reviewDataJson = ReviewJson.getJSONObject("reviews");
         JSONArray reviewArray = reviewDataJson.getJSONArray(REVIEW_LIST);
         ArrayList<Review> reviewItems = new ArrayList<Review>();
 
         reviewItems.clear();
-        for(int i = 0; i < reviewArray.length(); i++) {
+        for (int i = 0; i < reviewArray.length(); i++) {
             JSONObject reviewMovies = reviewArray.getJSONObject(i);
             String reviewId = reviewMovies.getString(REVIEW_ID);
             String reviewAuthor = reviewMovies.getString(REVIEW_AUTHOR);
@@ -87,10 +88,11 @@ public class JsonUtils {
         return reviewItems;
     }
 
-    private ArrayList<Trailer> getTrailerDataFromJson(String TrailerJsonStr)
+    public static ArrayList<Trailer> getMovieTrailersDataFromJson(String TrailerJsonStr)
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
+        final String TRAILER_VIDEOS = "videos";
         final String TRAILER_RESULTS = "results";
         final String MOVIE_ID = "id";
         final String TRAILER_KEY = "key";
@@ -98,25 +100,18 @@ public class JsonUtils {
 
         ArrayList<Trailer> resultMovieTrailers = new ArrayList<Trailer>();
         JSONObject TrailerJson = new JSONObject(TrailerJsonStr);
-        JSONArray trailersArray = TrailerJson.getJSONArray(TRAILER_RESULTS);
+        JSONObject TrailerDataJson = TrailerJson.getJSONObject(TRAILER_VIDEOS);
+        JSONArray trailersArray = TrailerDataJson.getJSONArray(TRAILER_RESULTS);
 
         resultMovieTrailers.clear();
         for (int i = 0; i < trailersArray.length(); i++) {
             JSONObject movieTrailerJson = trailersArray.getJSONObject(i);
             String id = movieTrailerJson.getString(MOVIE_ID);
             String key = movieTrailerJson.getString(TRAILER_KEY);
-            String name= movieTrailerJson.getString(TRAILER_NAME);
-            //  String site= movieTrailerJson.getString(TRAILER_SITE);
-            //String size= movieTrailerJson.getString(TRAILER_SIZE);
-            //String type = movieTrailerJson.getString(TRAILER_TYPE);
-            // movieTrailers.add(new MovieTrailer(id, key, name, site, size, type));
-            Trailer mT = new Trailer(id, key, name);
+            String name = movieTrailerJson.getString(TRAILER_NAME);
+            String site = movieTrailerJson.getString("site");
+            Trailer mT = new Trailer(id, key, name, site);
             resultMovieTrailers.add(mT);
-        }
-
-        for (Trailer s : resultMovieTrailers) {
-            Log.v(LOG_TAG, "Trailer Entry: " + s);
-            Log.v(LOG_TAG, "Key: " + s.getKey());
         }
 
         return resultMovieTrailers;

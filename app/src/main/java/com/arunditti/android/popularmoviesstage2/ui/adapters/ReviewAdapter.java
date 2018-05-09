@@ -22,6 +22,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewAdap
 
     private static final String TAG = ReviewAdapter.class.getSimpleName();
 
+   // private final ReviewAdapter.ReviewAdapterOnClickHandler mClickHandler;
    private final Context mContext;
     private ArrayList<Review> mReviewItems;
 

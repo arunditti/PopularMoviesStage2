@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_size">20sp</dimen>
+
+    <dimen name="trailer_image_width">120dp</dimen>
+    <dimen name="trailer_image_height">90dp</dimen>
+
+    <dimen name="review_item_padding">16dp</dimen>
 </resources>
