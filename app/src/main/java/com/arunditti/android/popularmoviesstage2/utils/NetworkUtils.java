@@ -19,21 +19,15 @@ import java.util.Scanner;
 public class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String MOVIE_BASE_URL = "https://api.themoviedb.org/3/discover/movie?";
-
     final static String APPEND_TO_RESPONSE_PARAM = "append_to_response";
-    private static final String TMDB_MOVIES_BASE_URL = "http://api.themoviedb.org/3/movie/";
+    private static final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie/";
 
-    private static final String SORT_BY = "sort_by";
     private static final String  API_KEY = "api_key";
 
-    //Format we want our API to return
-    private static final String format = "json";
-
     //Build the URL for movies
-    public static URL buildUrl(String movieQuery) {
+    public static URL buildUrl(String sortOrder) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                .appendQueryParameter(SORT_BY, movieQuery)
+                .appendPath(sortOrder)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
                 .build();
         URL url = null;
@@ -42,14 +36,13 @@ public class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        Log.v(TAG, "Built URI: " + url);
+        Log.v(TAG, "Built URI for movies: " + url);
         return url;
     }
 
   //Build the URL for movie reviews
     public static URL buildReviewUrl(String movieId) {
-        Uri builtUri = Uri.parse(TMDB_MOVIES_BASE_URL).buildUpon()
+        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendPath(movieId)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
                 .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "reviews")
@@ -60,13 +53,13 @@ public class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        Log.v(TAG, "Built URI for reviews and trailers: " + url);
+        Log.v(TAG, "Built URI for reviews: " + url);
         return url;
     }
 
     //Build the URL for movie trailers
     public static URL buildTrailerUrl(String movieId) {
-        Uri builtUri = Uri.parse(TMDB_MOVIES_BASE_URL).buildUpon()
+        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendPath(movieId)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
                 .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "videos")

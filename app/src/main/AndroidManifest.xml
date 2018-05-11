@@ -27,6 +27,12 @@
         <activity android:name=".ui.SettingsActivity"
             android:label="@string/label_action_settings"
             android:parentActivityName=".ui.MainActivity"></activity>
+
+        <provider
+            android:name="com.arunditti.android.popularmoviesstage2.data.FavoritesContentProvider"
+            android:authorities="com.arunditti.android.popularmoviesstage2"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

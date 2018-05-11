@@ -6,4 +6,6 @@
     <dimen name="trailer_image_height">90dp</dimen>
 
     <dimen name="review_item_padding">16dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
