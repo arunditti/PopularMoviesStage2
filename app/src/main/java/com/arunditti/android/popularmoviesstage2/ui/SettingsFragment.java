@@ -57,12 +57,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
             //For list preferences, look up the correct display value in the preference's 'entries' list
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(stringValue);
-            if(prefIndex >= 0) {
+
+            if (prefIndex >= 0) {
                 listPreference.setSummary(listPreference.getEntries()[prefIndex]);
+            } else {
+                // For other preferences, set the summary to the value's simple string representation.
+                preference.setSummary(stringValue);
             }
-        } else {
-            // For other preferences, set the summary to the value's simple string representation.
-            preference.setSummary(stringValue);
         }
     }
 

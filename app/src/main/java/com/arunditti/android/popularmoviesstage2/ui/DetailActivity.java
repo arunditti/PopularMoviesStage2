@@ -1,6 +1,8 @@
 package com.arunditti.android.popularmoviesstage2.ui;
 
+import android.content.ContentValues;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
@@ -15,8 +17,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arunditti.android.popularmoviesstage2.R;
+import com.arunditti.android.popularmoviesstage2.data.FavoritesContract;
+import com.arunditti.android.popularmoviesstage2.data.FavoritesDbHelper;
 import com.arunditti.android.popularmoviesstage2.databinding.ActivityDetailBinding;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
 import com.arunditti.android.popularmoviesstage2.model.Review;
@@ -52,6 +57,12 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private ProgressBar mLoadingIndicator;
 
+    private FloatingActionButton fab;
+
+    private boolean isFavorite = false;
+
+    ArrayList<MovieItem> mMovieItems = new ArrayList<MovieItem>();
+
     ArrayList<Review> mReviewItems = new ArrayList<Review>();
     ArrayList<Trailer> mTrailerItems = new ArrayList<Trailer>();
 
@@ -62,6 +73,21 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isFavorite) {
+                    //Delete movie from the database
+
+                } else {
+                    //Save movie as favorite
+                    //saveMovieAsFavorite();
+                }
+            }
+        });
+
 
                /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.detail_error_message_display);
@@ -99,7 +125,25 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         getSupportLoaderManager().restartLoader(loaderIdReview, null, mReviewLoader);
         getSupportLoaderManager().restartLoader(loaderIdTrailer, null, mTrailerLoader);
 
+        //FavoritesDbHelper favoritesDbHelper = new FavoritesDbHelper(this);
+
     }
+
+ //   private Uri saveMovieAsFavorite() {
+//        //Create new empty ContentValues object
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_ID, mCurrentMovieItem.getItemId());
+//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, mCurrentMovieItem.getMovieTitle());
+//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, mCurrentMovieItem.getmMovieReleaseDate());
+//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_OVERVIEW, mCurrentMovieItem.getmOverview());
+//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, mCurrentMovieItem.getmRating());
+//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_IMAGE_PATH, mCurrentMovieItem.getmImagePath());
+//
+//        Uri uri = getContentResolver().insert(FavoritesContract.FavoriteEntry.CONTENT_URI, contentValues);
+
+//        return uri;
+//    }
+
 
     private LoaderManager.LoaderCallbacks<ArrayList<Review>> mReviewLoader = new LoaderCallbacks<ArrayList<Review>>() {
 
