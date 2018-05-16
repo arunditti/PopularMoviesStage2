@@ -101,58 +101,58 @@ public class DatabaseTest {
      * The purpose is to test that the database is working as expected
      * @throws Exception in case the constructor hasn't been implemented yet
      */
-//    @Test
-//    public void insert_single_record_test() throws Exception{
-//
-//        /* Use reflection to try to run the correct constructor whenever implemented */
-//        SQLiteOpenHelper dbHelper =
-//                (SQLiteOpenHelper) mDbHelperClass.getConstructor(Context.class).newInstance(mContext);
-//
-//        /* Use WaitlistDbHelper to get access to a writable database */
-//        SQLiteDatabase database = dbHelper.getWritableDatabase();
-//
-//        ContentValues testValues = new ContentValues();
-//        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, "test name");
-//        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, "hi");
-//
-//        /* Insert ContentValues into database and get first row ID back */
-//        long firstRowId = database.insert(
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                null,
-//                testValues);
-//
-//        /* If the insert fails, database.insert returns -1 */
-//        assertNotEquals("Unable to insert into the database", -1, firstRowId);
-//
-//        /*
-//         * Query the database and receive a Cursor. A Cursor is the primary way to interact with
-//         * a database in Android.
-//         */
-//        Cursor wCursor = database.query(
-//                /* Name of table on which to perform the query */
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                /* Columns; leaving this null returns every column in the table */
-//                null,
-//                /* Optional specification for columns in the "where" clause above */
-//                null,
-//                /* Values for "where" clause */
-//                null,
-//                /* Columns to group by */
-//                null,
-//                /* Columns to filter by row groups */
-//                null,
-//                /* Sort order to return in Cursor */
-//                null);
-//
-//        /* Cursor.moveToFirst will return false if there are no records returned from your query */
-//        String emptyQueryError = "Error: No Records returned from waitlist query";
-//        assertTrue(emptyQueryError,
-//                wCursor.moveToFirst());
-//
-//        /* Close cursor and database */
-//        wCursor.close();
-//        dbHelper.close();
-//    }
+    @Test
+    public void insert_single_record_test() throws Exception{
+
+        /* Use reflection to try to run the correct constructor whenever implemented */
+        SQLiteOpenHelper dbHelper =
+                (SQLiteOpenHelper) mDbHelperClass.getConstructor(Context.class).newInstance(mContext);
+
+        /* Use WaitlistDbHelper to get access to a writable database */
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = new ContentValues();
+        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, "test name");
+        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, "hi");
+
+        /* Insert ContentValues into database and get first row ID back */
+        long firstRowId = database.insert(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                testValues);
+
+        /* If the insert fails, database.insert returns -1 */
+        assertNotEquals("Unable to insert into the database", -1, firstRowId);
+
+        /*
+         * Query the database and receive a Cursor. A Cursor is the primary way to interact with
+         * a database in Android.
+         */
+        Cursor wCursor = database.query(
+                /* Name of table on which to perform the query */
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                /* Columns; leaving this null returns every column in the table */
+                null,
+                /* Optional specification for columns in the "where" clause above */
+                null,
+                /* Values for "where" clause */
+                null,
+                /* Columns to group by */
+                null,
+                /* Columns to filter by row groups */
+                null,
+                /* Sort order to return in Cursor */
+                null);
+
+        /* Cursor.moveToFirst will return false if there are no records returned from your query */
+        String emptyQueryError = "Error: No Records returned from waitlist query";
+        assertTrue(emptyQueryError,
+                wCursor.moveToFirst());
+
+        /* Close cursor and database */
+        wCursor.close();
+        dbHelper.close();
+    }
 
 
     /**
@@ -160,115 +160,115 @@ public class DatabaseTest {
      * incrementing row IDs.
      * @throws Exception in case the constructor hasn't been implemented yet
      */
-//    @Test
-//    public void autoincrement_test() throws Exception{
-//
-//        /* First, let's ensure we have some values in our table initially */
-//        insert_single_record_test();
-//
-//        /* Use reflection to try to run the correct constructor whenever implemented */
-//        SQLiteOpenHelper dbHelper =
-//                (SQLiteOpenHelper) mDbHelperClass.getConstructor(Context.class).newInstance(mContext);
-//
-//        /* Use WaitlistDbHelper to get access to a writable database */
-//        SQLiteDatabase database = dbHelper.getWritableDatabase();
-//
-//        ContentValues testValues = new ContentValues();
-//        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, "test name");
-//        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, "hi");
-//
-//        /* Insert ContentValues into database and get first row ID back */
-//        long firstRowId = database.insert(
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                null,
-//                testValues);
-//
-//        /* Insert ContentValues into database and get another row ID back */
-//        long secondRowId = database.insert(
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                null,
-//                testValues);
-//
-//        assertEquals("ID Autoincrement test failed!",
-//                firstRowId + 1, secondRowId);
-//
-//
-//    }
-//
-//
-//    /**
-//     * Tests that onUpgrade works by inserting 2 rows then calling onUpgrade and verifies that the
-//     * database has been successfully dropped and recreated by checking that the database is there
-//     * but empty
-//     * @throws Exception in case the constructor hasn't been implemented yet
-//     */
-//    @Test
-//    public void upgrade_database_test() throws Exception{
-//
-//        /* Insert 2 rows before we upgrade to check that we dropped the database correctly */
-//
-//        /* Use reflection to try to run the correct constructor whenever implemented */
-//        SQLiteOpenHelper dbHelper =
-//                (SQLiteOpenHelper) mDbHelperClass.getConstructor(Context.class).newInstance(mContext);
-//
-//        /* Use WaitlistDbHelper to get access to a writable database */
-//        SQLiteDatabase database = dbHelper.getWritableDatabase();
-//
-//        ContentValues testValues = new ContentValues();
-//        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, "test name");
-//        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, "hi");
-//
-//        /* Insert ContentValues into database and get first row ID back */
-//        long firstRowId = database.insert(
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                null,
-//                testValues);
-//
-//        /* Insert ContentValues into database and get another row ID back */
-//        long secondRowId = database.insert(
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                null,
-//                testValues);
-//
-//        dbHelper.onUpgrade(database, 0, 1);
-//        database = dbHelper.getReadableDatabase();
-//
-//        /* This Cursor will contain the names of each table in our database */
-//        Cursor tableNameCursor = database.rawQuery(
-//                "SELECT name FROM sqlite_master WHERE type='table' AND name='" +
-//                        FavoritesContract.FavoriteEntry.TABLE_NAME + "'",
-//                null);
-//
-//        assertTrue(tableNameCursor.getCount() == 1);
-//
-//        /*
-//         * Query the database and receive a Cursor. A Cursor is the primary way to interact with
-//         * a database in Android.
-//         */
-//        Cursor wCursor = database.query(
-//                /* Name of table on which to perform the query */
-//                FavoritesContract.FavoriteEntry.TABLE_NAME,
-//                /* Columns; leaving this null returns every column in the table */
-//                null,
-//                /* Optional specification for columns in the "where" clause above */
-//                null,
-//                /* Values for "where" clause */
-//                null,
-//                /* Columns to group by */
-//                null,
-//                /* Columns to filter by row groups */
-//                null,
-//                /* Sort order to return in Cursor */
-//                null);
-//
-//        /* Cursor.moveToFirst will return false if there are no records returned from your query */
-//
-//        assertFalse("Database doesn't seem to have been dropped successfully when upgrading",
-//                wCursor.moveToFirst());
-//
-//        tableNameCursor.close();
-//        database.close();
-//    }
+    @Test
+    public void autoincrement_test() throws Exception{
+
+        /* First, let's ensure we have some values in our table initially */
+        insert_single_record_test();
+
+        /* Use reflection to try to run the correct constructor whenever implemented */
+        SQLiteOpenHelper dbHelper =
+                (SQLiteOpenHelper) mDbHelperClass.getConstructor(Context.class).newInstance(mContext);
+
+        /* Use WaitlistDbHelper to get access to a writable database */
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = new ContentValues();
+        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, "test name");
+        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, "hi");
+
+        /* Insert ContentValues into database and get first row ID back */
+        long firstRowId = database.insert(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                testValues);
+
+        /* Insert ContentValues into database and get another row ID back */
+        long secondRowId = database.insert(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                testValues);
+
+        assertEquals("ID Autoincrement test failed!",
+                firstRowId + 1, secondRowId);
+
+
+    }
+
+
+    /**
+     * Tests that onUpgrade works by inserting 2 rows then calling onUpgrade and verifies that the
+     * database has been successfully dropped and recreated by checking that the database is there
+     * but empty
+     * @throws Exception in case the constructor hasn't been implemented yet
+     */
+    @Test
+    public void upgrade_database_test() throws Exception{
+
+        /* Insert 2 rows before we upgrade to check that we dropped the database correctly */
+
+        /* Use reflection to try to run the correct constructor whenever implemented */
+        SQLiteOpenHelper dbHelper =
+                (SQLiteOpenHelper) mDbHelperClass.getConstructor(Context.class).newInstance(mContext);
+
+        /* Use WaitlistDbHelper to get access to a writable database */
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = new ContentValues();
+        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, "test name");
+        testValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, "hi");
+
+        /* Insert ContentValues into database and get first row ID back */
+        long firstRowId = database.insert(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                testValues);
+
+        /* Insert ContentValues into database and get another row ID back */
+        long secondRowId = database.insert(
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                null,
+                testValues);
+
+        dbHelper.onUpgrade(database, 0, 1);
+        database = dbHelper.getReadableDatabase();
+
+        /* This Cursor will contain the names of each table in our database */
+        Cursor tableNameCursor = database.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='" +
+                        FavoritesContract.FavoriteEntry.TABLE_NAME + "'",
+                null);
+
+        assertTrue(tableNameCursor.getCount() == 1);
+
+        /*
+         * Query the database and receive a Cursor. A Cursor is the primary way to interact with
+         * a database in Android.
+         */
+        Cursor wCursor = database.query(
+                /* Name of table on which to perform the query */
+                FavoritesContract.FavoriteEntry.TABLE_NAME,
+                /* Columns; leaving this null returns every column in the table */
+                null,
+                /* Optional specification for columns in the "where" clause above */
+                null,
+                /* Values for "where" clause */
+                null,
+                /* Columns to group by */
+                null,
+                /* Columns to filter by row groups */
+                null,
+                /* Sort order to return in Cursor */
+                null);
+
+        /* Cursor.moveToFirst will return false if there are no records returned from your query */
+
+        assertFalse("Database doesn't seem to have been dropped successfully when upgrading",
+                wCursor.moveToFirst());
+
+        tableNameCursor.close();
+        database.close();
+    }
 
     /**
      * Deletes the entire database.

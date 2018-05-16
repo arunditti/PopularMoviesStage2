@@ -16,7 +16,9 @@ public class FavoritesContract {
     public static final String AUTHORITY = "com.arunditti.android.popularmoviesstage2";
 
     //The base content URI = "content://" + <authority>
-    public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
+    //public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
+
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     //Define the possible paths for accessing data in the contract
     public static final String PATH_FAVORITES = "favorites";

@@ -15,12 +15,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arunditti.android.popularmoviesstage2.R;
 import com.arunditti.android.popularmoviesstage2.data.FavoritesContract;
+import com.arunditti.android.popularmoviesstage2.data.FavoritesContract.FavoriteEntry;
 import com.arunditti.android.popularmoviesstage2.data.FavoritesDbHelper;
 import com.arunditti.android.popularmoviesstage2.databinding.ActivityDetailBinding;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
@@ -80,14 +82,16 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
             public void onClick(View view) {
                 if(isFavorite) {
                     //Delete movie from the database
+                    deleteFromFavorites();
 
                 } else {
                     //Save movie as favorite
-                    //saveMovieAsFavorite();
+                    saveMovieAsFavorite();
                 }
+                //cursor.close();
+                saveMovieAsFavorite();
             }
         });
-
 
                /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.detail_error_message_display);
@@ -125,24 +129,32 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         getSupportLoaderManager().restartLoader(loaderIdReview, null, mReviewLoader);
         getSupportLoaderManager().restartLoader(loaderIdTrailer, null, mTrailerLoader);
 
-        //FavoritesDbHelper favoritesDbHelper = new FavoritesDbHelper(this);
-
     }
 
- //   private Uri saveMovieAsFavorite() {
-//        //Create new empty ContentValues object
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_ID, mCurrentMovieItem.getItemId());
-//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_TITLE, mCurrentMovieItem.getMovieTitle());
-//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, mCurrentMovieItem.getmMovieReleaseDate());
-//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_OVERVIEW, mCurrentMovieItem.getmOverview());
-//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_RATING, mCurrentMovieItem.getmRating());
-//        contentValues.put(FavoritesContract.FavoriteEntry.COLUMN_MOVIE_IMAGE_PATH, mCurrentMovieItem.getmImagePath());
-//
-//        Uri uri = getContentResolver().insert(FavoritesContract.FavoriteEntry.CONTENT_URI, contentValues);
+    private void deleteFromFavorites() {
+    }
 
-//        return uri;
-//    }
+    private void saveMovieAsFavorite() {
+        //Create new empty ContentValues object
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(FavoriteEntry.COLUMN_MOVIE_ID, mCurrentMovieItem.getItemId());
+        contentValues.put(FavoriteEntry.COLUMN_MOVIE_TITLE, mCurrentMovieItem.getMovieTitle());
+        contentValues.put(FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, mCurrentMovieItem.getmMovieReleaseDate());
+        contentValues.put(FavoriteEntry.COLUMN_MOVIE_OVERVIEW, mCurrentMovieItem.getmOverview());
+        contentValues.put(FavoriteEntry.COLUMN_MOVIE_RATING, mCurrentMovieItem.getmRating());
+        contentValues.put(FavoriteEntry.COLUMN_MOVIE_IMAGE_PATH, mCurrentMovieItem.getmImagePath());
+
+        Uri uri = getContentResolver().insert(FavoriteEntry.CONTENT_URI, contentValues);
+
+        Log.d(LOG_TAG, "Created URI is: " + uri.toString());
+
+        if(uri != null) {
+            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        }
+
+        //Finish activity amd this returns back to MainActivity
+        finish();
+    }
 
 
     private LoaderManager.LoaderCallbacks<ArrayList<Review>> mReviewLoader = new LoaderCallbacks<ArrayList<Review>>() {
