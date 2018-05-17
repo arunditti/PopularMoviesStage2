@@ -1,6 +1,7 @@
 package com.arunditti.android.popularmoviesstage2.ui;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -61,7 +62,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private FloatingActionButton fab;
 
-    private boolean isFavorite = false;
+    private boolean isFavorite = true;
 
     ArrayList<MovieItem> mMovieItems = new ArrayList<MovieItem>();
 
@@ -135,6 +136,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     }
 
     private void saveMovieAsFavorite() {
+
         //Create new empty ContentValues object
         ContentValues contentValues = new ContentValues();
         contentValues.put(FavoriteEntry.COLUMN_MOVIE_ID, mCurrentMovieItem.getItemId());

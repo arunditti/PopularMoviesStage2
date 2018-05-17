@@ -11,13 +11,15 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import static com.arunditti.android.popularmoviesstage2.data.FavoritesContract.FavoriteEntry.TABLE_NAME;
+import com.arunditti.android.popularmoviesstage2.data.FavoritesContract.FavoriteEntry;
 
 /**
  * Created by arunditti on 5/10/18.
  */
 
 public class FavoritesContentProvider extends ContentProvider {
+
+    private static final String LOG_TAG = FavoritesContentProvider.class.getSimpleName();
 
     public static final int FAVORITES = 100;
     public static final int FAVORITES_WITH_ID = 101;
@@ -64,7 +66,7 @@ public class FavoritesContentProvider extends ContentProvider {
         switch(match) {
             //Query for favorite movies
             case FAVORITES:
-                returnCursor = db.query(TABLE_NAME,
+                returnCursor = db.query(FavoriteEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -105,7 +107,8 @@ public class FavoritesContentProvider extends ContentProvider {
 
         switch (match) {
             case FAVORITES:
-                long id = db.insert(TABLE_NAME, null, values);
+                long id = db.insert(FavoriteEntry.TABLE_NAME, null, values);
+
                 if(id > 0 ) {
                     returnUri = ContentUris.withAppendedId(FavoritesContract.FavoriteEntry.CONTENT_URI, id);
                 } else {
@@ -124,7 +127,25 @@ public class FavoritesContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        //Get acces to the database and wrie URI matcher code to recognize single item
+        final SQLiteDatabase db = mFavoriteDbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+        //Keep track of number of deleted tasks
+        int numRowsDeleted;
+
+        switch (match) {
+            case FAVORITES:
+                numRowsDeleted = db.delete(FavoriteEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+                default:
+                    throw new UnsupportedOperationException("Unknown Uri: " + uri);
+        }
+
+        if(numRowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return numRowsDeleted;
     }
 
     @Override
