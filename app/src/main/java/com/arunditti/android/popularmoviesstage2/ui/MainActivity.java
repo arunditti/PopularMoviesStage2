@@ -87,44 +87,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
 
-
-        displayDatabaseInfo();
-
     }
-
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the database.
-     */
-    private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        FavoritesDbHelper mDbHelper = new FavoritesDbHelper(this);
-
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // Perform this raw SQL query "SELECT * FROM pets"
-        // to get a Cursor that contains all rows from the pets table.
-        //Cursor cursor = db.rawQuery("SELECT * FROM " + FavoriteEntry.TABLE_NAME, null);
-        Cursor cursor = getContentResolver().query(FavoriteEntry.CONTENT_URI,
-                null,
-                null,
-                null,
-                null);
-
-        try {
-            // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // favorites table in the database).
-            TextView displayView = (TextView) findViewById(R.id.tv_error_message_display);
-            displayView.setText("Number of rows in favorites database table: " + cursor.getCount());
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
-    }
-    
 
     @Override
     public Loader<ArrayList<MovieItem>> onCreateLoader(int id, final Bundle args) {
@@ -147,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
             @Override
             public ArrayList<MovieItem> loadInBackground() {
 
-                String sortBy = MoviePreferences.getPreferredMovie(MainActivity.this);
+                String sortBy = MoviePreferences.getSortOrder(MainActivity.this);
 
                 Log.d(LOG_TAG, "movieQuery is: " + sortBy);
 

@@ -1,8 +1,14 @@
 package com.arunditti.android.popularmoviesstage2.ui;
 
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Movie;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -32,6 +38,7 @@ import com.arunditti.android.popularmoviesstage2.model.Trailer;
 import com.arunditti.android.popularmoviesstage2.ui.adapters.ReviewAdapter;
 import com.arunditti.android.popularmoviesstage2.ui.adapters.TrailerAdapter;
 import com.arunditti.android.popularmoviesstage2.utils.JsonUtils;
+import com.arunditti.android.popularmoviesstage2.utils.MoviePreferences;
 import com.arunditti.android.popularmoviesstage2.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
@@ -62,7 +69,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     private FloatingActionButton fab;
 
-    private boolean isFavorite = true;
+    private boolean isFavorite = false;
 
     ArrayList<MovieItem> mMovieItems = new ArrayList<MovieItem>();
 
@@ -77,27 +84,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(isFavorite) {
-                    //Delete movie from the database
-                    deleteFromFavorites();
-
-                } else {
-                    //Save movie as favorite
-                    saveMovieAsFavorite();
-                }
-                //cursor.close();
-                saveMovieAsFavorite();
-            }
-        });
-
                /* This TextView is used to display errors and will be hidden if there are no errors */
         mErrorMessageDisplay = (TextView) findViewById(R.id.detail_error_message_display);
 
         Intent intentThatStartedThisActivity = getIntent();
+
         mCurrentMovieItem = intentThatStartedThisActivity.getParcelableExtra("MovieItem");
 
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
@@ -105,6 +96,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mDetailBinding.movieReleaseDate.setText(mCurrentMovieItem.getmMovieReleaseDate());
         mDetailBinding.movieRating.setText(mCurrentMovieItem.getmRating());
         mDetailBinding.movieOverview.setText(mCurrentMovieItem.getmOverview());
+
+        fab = mDetailBinding.fab;
 
         Picasso.with(this)
                 .load(mCurrentMovieItem.getmImagePath())
@@ -130,32 +123,87 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         getSupportLoaderManager().restartLoader(loaderIdReview, null, mReviewLoader);
         getSupportLoaderManager().restartLoader(loaderIdTrailer, null, mTrailerLoader);
 
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String keyForMovie = getString(R.string.pref_sort_by_key);
+        String defaultMovie = getString(R.string.pref_sort_by_default_value);
+        String sortBy = sharedPreferences.getString(keyForMovie, defaultMovie);
+
+        if(sortBy.equals(R.string.pref_sort_by_favorite_value) || isMovieFavorite(mCurrentMovieItem.getItemId()) ) {
+            isFavorite = true;
+        }
+
+        setFabButton(isFavorite);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isFavorite) {
+                    deleteFromFavorites();
+                    Toast.makeText(DetailActivity.this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+                } else {
+                    new saveMovieAsFavorite().execute(mCurrentMovieItem);
+                }
+                isFavorite = !isFavorite;
+                setFabButton(isFavorite);
+            }
+        });
+
+    }
+
+    private boolean isMovieFavorite(String movieId) {
+        String mSelectionClause = FavoriteEntry.COLUMN_MOVIE_ID + " = ?";
+        String[] mSelectionArgs = {movieId};
+        Cursor mCursor = getContentResolver().query(FavoriteEntry.CONTENT_URI, null, mSelectionClause, mSelectionArgs, null);                       // The sort order for the returned rows
+        boolean movieIsFavorited = (mCursor != null && mCursor.getCount() == 1);
+        mCursor.close();
+        return movieIsFavorited;
+    }
+
+    private void setFabButton(boolean isFavorite) {
+        if (isFavorite) {
+            fab.setImageResource(R.drawable.ic_launcher_background);
+        } else {
+            fab.setImageResource(R.drawable.ic_launcher_foreground);
+        }
     }
 
     private void deleteFromFavorites() {
+        String mSelectionClause = FavoriteEntry.COLUMN_MOVIE_ID + " = ?";
+        String[] mSelectionArgs = {mCurrentMovieItem.getItemId()};
+        int mRowDeleted = getContentResolver().delete(FavoriteEntry.CONTENT_URI, mSelectionClause, mSelectionArgs);
     }
 
-    private void saveMovieAsFavorite() {
 
-        //Create new empty ContentValues object
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(FavoriteEntry.COLUMN_MOVIE_ID, mCurrentMovieItem.getItemId());
-        contentValues.put(FavoriteEntry.COLUMN_MOVIE_TITLE, mCurrentMovieItem.getMovieTitle());
-        contentValues.put(FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, mCurrentMovieItem.getmMovieReleaseDate());
-        contentValues.put(FavoriteEntry.COLUMN_MOVIE_OVERVIEW, mCurrentMovieItem.getmOverview());
-        contentValues.put(FavoriteEntry.COLUMN_MOVIE_RATING, mCurrentMovieItem.getmRating());
-        contentValues.put(FavoriteEntry.COLUMN_MOVIE_IMAGE_PATH, mCurrentMovieItem.getmImagePath());
+    public class saveMovieAsFavorite extends AsyncTask<MovieItem, Void, Uri> {
+        MovieItem movieItem;
 
-        Uri uri = getContentResolver().insert(FavoriteEntry.CONTENT_URI, contentValues);
-
-        Log.d(LOG_TAG, "Created URI is: " + uri.toString());
-
-        if(uri != null) {
-            Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
         }
 
-        //Finish activity amd this returns back to MainActivity
-        finish();
+        @Override
+        protected Uri doInBackground(MovieItem... params) {
+            movieItem = params[0];
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(FavoriteEntry.COLUMN_MOVIE_ID, mCurrentMovieItem.getItemId());
+            contentValues.put(FavoriteEntry.COLUMN_MOVIE_TITLE, mCurrentMovieItem.getMovieTitle());
+            contentValues.put(FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE, mCurrentMovieItem.getmMovieReleaseDate());
+            contentValues.put(FavoriteEntry.COLUMN_MOVIE_OVERVIEW, mCurrentMovieItem.getmOverview());
+            contentValues.put(FavoriteEntry.COLUMN_MOVIE_RATING, mCurrentMovieItem.getmRating());
+            contentValues.put(FavoriteEntry.COLUMN_MOVIE_IMAGE_PATH, mCurrentMovieItem.getmImagePath());
+
+            return getContentResolver().insert(FavoriteEntry.CONTENT_URI, contentValues);
+
+        }
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+            if (uri != null) {
+                Toast.makeText(DetailActivity.this, getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

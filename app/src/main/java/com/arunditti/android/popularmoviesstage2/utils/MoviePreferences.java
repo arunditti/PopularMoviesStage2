@@ -12,7 +12,7 @@ import com.arunditti.android.popularmoviesstage2.R;
 
 public class MoviePreferences {
 
-    public static String getPreferredMovie(Context context) {
+    public static String getSortOrder(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String keyForMovie = context.getString(R.string.pref_sort_by_key);
