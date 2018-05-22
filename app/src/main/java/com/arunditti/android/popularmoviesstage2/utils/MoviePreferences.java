@@ -13,11 +13,12 @@ import com.arunditti.android.popularmoviesstage2.R;
 public class MoviePreferences {
 
     public static String getSortOrder(Context context) {
+        String sortBy;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String keyForMovie = context.getString(R.string.pref_sort_by_key);
         String defaultMovie = context.getString(R.string.pref_sort_by_default_value);
-        String sortBy = sharedPreferences.getString(keyForMovie, defaultMovie);
+        sortBy = sharedPreferences.getString(keyForMovie, defaultMovie);
 
         if(sortBy.equals(R.string.pref_sort_by_favorite_value)) {
             //Load movies from database

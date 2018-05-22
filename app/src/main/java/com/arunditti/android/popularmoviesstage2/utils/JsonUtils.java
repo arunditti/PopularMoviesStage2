@@ -5,7 +5,6 @@ import android.content.Context;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
 import com.arunditti.android.popularmoviesstage2.model.Review;
 import com.arunditti.android.popularmoviesstage2.model.Trailer;
-import com.arunditti.android.popularmoviesstage2.ui.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 public class JsonUtils {
     private final String LOG_TAG = JsonUtils.class.getSimpleName();
 
-    public static ArrayList<MovieItem> getPopularMoviesDataFromJson(MainActivity mainActivity, String PopularMoviesJsonStr)
+    public static ArrayList<MovieItem> getPopularMoviesDataFromJson(Context mainActivity, String PopularMoviesJsonStr)
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
@@ -52,25 +51,25 @@ public class JsonUtils {
             String rating = popularMovies.getString(PMD_RATING);
             String imagePath = PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
             String backdropPath = PMD_BACKDROP_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
-           // movieItems.add(new MovieItem(movieId, title, releaseDate, movieOverview, rating, imagePath, backdropPath));
+           movieItems.add(new MovieItem(movieId, title, releaseDate, movieOverview, rating, imagePath, backdropPath));
 
-            movieItem.setMovieId(movieId);
-            movieItem.setmMovieTitle(title);
-            movieItem.setmMovieReleaseDate(releaseDate);
-            movieItem.setmOverview(movieOverview);
-            movieItem.setmRating(rating);
-            movieItem.setmImagePath(imagePath);
-            movieItem.setmBackdropPath(backdropPath);
-
-//           // movieItem.setMovieId(popularMovies.getString(PMD_ID));
-//            movieItem.setmMovieTitle(popularMovies.getString(PMD_TITLE));
-//            movieItem.setmMovieReleaseDate(popularMovies.getString(PMD_RELEASE_DATE));
-//            movieItem.setmOverview(popularMovies.getString(PMD_OVERVIEW));
-//            movieItem.setmRating(popularMovies.getString(PMD_RATING));
-//            movieItem.setmImagePath(PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER));
-//            movieItem.setmBackdropPath(popularMovies.getString(PMD_ID));
-
-            movieItems.add(movieItem);
+//            movieItem.setMovieId(movieId);
+//            movieItem.setmMovieTitle(title);
+//            movieItem.setmMovieReleaseDate(releaseDate);
+//            movieItem.setmOverview(movieOverview);
+//            movieItem.setmRating(rating);
+//            movieItem.setmImagePath(imagePath);
+//            movieItem.setmBackdropPath(backdropPath);
+//
+////           // movieItem.setMovieId(popularMovies.getString(PMD_ID));
+////            movieItem.setmMovieTitle(popularMovies.getString(PMD_TITLE));
+////            movieItem.setmMovieReleaseDate(popularMovies.getString(PMD_RELEASE_DATE));
+////            movieItem.setmOverview(popularMovies.getString(PMD_OVERVIEW));
+////            movieItem.setmRating(popularMovies.getString(PMD_RATING));
+////            movieItem.setmImagePath(PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER));
+////            movieItem.setmBackdropPath(popularMovies.getString(PMD_ID));
+//
+//            movieItems.add(movieItem);
 
         }
         return movieItems;

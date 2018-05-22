@@ -1,8 +1,12 @@
 package com.arunditti.android.popularmoviesstage2.ui;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Movie;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -27,6 +31,7 @@ import com.arunditti.android.popularmoviesstage2.data.FavoritesDbHelper;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
 import com.arunditti.android.popularmoviesstage2.ui.adapters.MovieAdapter;
 import com.arunditti.android.popularmoviesstage2.ui.adapters.MovieAdapter.MovieAdapterOnClickHandler;
+import com.arunditti.android.popularmoviesstage2.ui.loaders.FetchMoviesLoader;
 import com.arunditti.android.popularmoviesstage2.utils.JsonUtils;
 import com.arunditti.android.popularmoviesstage2.utils.MoviePreferences;
 import com.arunditti.android.popularmoviesstage2.utils.NetworkUtils;
@@ -36,7 +41,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapterOnClickHandler,
-        LoaderCallbacks<ArrayList<MovieItem>>,
+       LoaderCallbacks<ArrayList<MovieItem>>,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -110,20 +115,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
             @Override
             public ArrayList<MovieItem> loadInBackground() {
 
-                String sortBy = MoviePreferences.getSortOrder(MainActivity.this);
+//                String sortBy = MoviePreferences.getSortOrder(MainActivity.this);
 
-                Log.d(LOG_TAG, "movieQuery is: " + sortBy);
+                String mSortBy = setupSharedPreferences();;
 
-                    URL MovieRequestUrl = NetworkUtils.buildUrl(sortBy);
+              // if(!mSortBy.equals(R.string.pref_sort_by_favorite_value)) {
+                    Log.d(LOG_TAG, "movieQuery is: " + mSortBy);
 
-                try {
-                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(MovieRequestUrl);
-                    ArrayList<MovieItem> simpleJsonMovieData = JsonUtils.getPopularMoviesDataFromJson(MainActivity.this, jsonMovieResponse);
-                    return simpleJsonMovieData;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
+                    URL MovieRequestUrl = NetworkUtils.buildUrl(mSortBy);
+
+                    try {
+                        String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(MovieRequestUrl);
+                        ArrayList<MovieItem> simpleJsonMovieData = JsonUtils.getPopularMoviesDataFromJson(MainActivity.this, jsonMovieResponse);
+                        return simpleJsonMovieData;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+
+//                } else {
+//                    fetchFavoriteMovies();
+//
+//                }
+                //return mMovieData;
+
             }
 
             public void deliverResult(ArrayList<MovieItem> data) {
@@ -149,6 +164,33 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 
     }
 
+    public void fetchFavoriteMovies() {
+        Cursor mCursor = getContentResolver().query(FavoriteEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
+
+        ArrayList<MovieItem> movieItems = new ArrayList<MovieItem>();
+
+
+        while (mCursor.moveToNext()) {
+
+            String movieId = mCursor.getString(mCursor.getColumnIndex(FavoriteEntry.COLUMN_MOVIE_ID));
+            String movieTitle = mCursor.getString(mCursor.getColumnIndex(FavoriteEntry.COLUMN_MOVIE_TITLE));
+            String movieReleaseDate = mCursor.getString(mCursor.getColumnIndex(FavoriteEntry.COLUMN_MOVIE_RELEASE_DATE));
+            String movieOverview = mCursor.getString(mCursor.getColumnIndex(FavoriteEntry.COLUMN_MOVIE_OVERVIEW));
+            String movieRating = mCursor.getString(mCursor.getColumnIndex(FavoriteEntry.COLUMN_MOVIE_RATING));
+            String movieImage = mCursor.getString(mCursor.getColumnIndex(FavoriteEntry.COLUMN_MOVIE_IMAGE_PATH));
+            MovieItem movieItem = new MovieItem(movieId, movieTitle, movieReleaseDate, movieOverview, movieRating, movieImage, movieImage);
+            movieItems.add(movieItem);
+        }
+
+        mAdapter.updateMovieList(movieItems);
+        mCursor.close();
+    }
+
+
     private void showMovieDataView() {
         /* First, make sure the error is invisible */
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
@@ -162,6 +204,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
+
+        private String setupSharedPreferences() {
+        String sortBy;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String keyForMovie = getString(R.string.pref_sort_by_key);
+        String defaultMovie = getString(R.string.pref_sort_by_default_value);
+        sortBy = sharedPreferences.getString(keyForMovie, defaultMovie);
+
+        //sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+//
+//        if (sortBy.equals(getString(R.string.pref_sort_by_favorite_value))) {
+//            // Load data from the database
+//            fetchFavoriteMovies();
+//
+//        } else {
+//            //new FetchMoviesTask().execute(sortBy);
+//        }
+
+        return  sortBy;
+
+    }
+
+
 
     @Override
     public void onClick(MovieItem movieClicked) {
@@ -212,4 +278,44 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         PREFERENCES_HAVE_BEEN_UPDATED = true;
 
     }
+
+    //    public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieItem>> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            mLoadingIndicator.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected ArrayList<MovieItem> doInBackground(String... params) {
+//
+//            mSortBy = params[0];;
+//
+//            URL MovieRequestUrl = NetworkUtils.buildUrl(mSortBy);
+//
+//            try {
+//                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(MovieRequestUrl);
+//                ArrayList<MovieItem> simpleJsonMovieData = JsonUtils.getPopularMoviesDataFromJson(MainActivity.this, jsonMovieResponse);
+//                return simpleJsonMovieData;
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(ArrayList<MovieItem> data) {
+//            mLoadingIndicator.setVisibility(View.INVISIBLE);
+//            if (data != null) {
+//                mMovieItems = data;
+//                showMovieDataView();
+//                mAdapter.updateMovieList(mMovieItems);
+//            } else {
+//                showErrorMessage();
+//            }
+//        }
+//    }
+//
+
 }

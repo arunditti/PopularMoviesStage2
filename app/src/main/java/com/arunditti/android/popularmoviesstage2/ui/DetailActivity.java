@@ -131,9 +131,11 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         if(sortBy.equals(R.string.pref_sort_by_favorite_value) || isMovieFavorite(mCurrentMovieItem.getItemId()) ) {
             isFavorite = true;
+            fab.setImageResource(R.drawable.ic_launcher_background);
+        } else {
+            isFavorite = false;
+            fab.setImageResource(R.drawable.ic_launcher_foreground);
         }
-
-        setFabButton(isFavorite);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,11 +143,13 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
                 if (isFavorite) {
                     deleteFromFavorites();
                     Toast.makeText(DetailActivity.this, getString(R.string.removed_from_favorites), Toast.LENGTH_SHORT).show();
+                    isFavorite = false;
+                    fab.setImageResource(R.drawable.ic_launcher_foreground);
                 } else {
                     new saveMovieAsFavorite().execute(mCurrentMovieItem);
+                    isFavorite = true;
+                    fab.setImageResource(R.drawable.ic_launcher_background);
                 }
-                isFavorite = !isFavorite;
-                setFabButton(isFavorite);
             }
         });
 
@@ -155,17 +159,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         String mSelectionClause = FavoriteEntry.COLUMN_MOVIE_ID + " = ?";
         String[] mSelectionArgs = {movieId};
         Cursor mCursor = getContentResolver().query(FavoriteEntry.CONTENT_URI, null, mSelectionClause, mSelectionArgs, null);                       // The sort order for the returned rows
-        boolean movieIsFavorited = (mCursor != null && mCursor.getCount() == 1);
+        boolean movieIsFavorited = (mCursor != null && mCursor.getCount() > 0);
         mCursor.close();
         return movieIsFavorited;
-    }
-
-    private void setFabButton(boolean isFavorite) {
-        if (isFavorite) {
-            fab.setImageResource(R.drawable.ic_launcher_background);
-        } else {
-            fab.setImageResource(R.drawable.ic_launcher_foreground);
-        }
     }
 
     private void deleteFromFavorites() {
@@ -329,6 +325,16 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         }
     };
 
+    @Override
+    public void onClick(Trailer trailerClicked) {
+
+        String videoKey = trailerClicked.getKey();
+        Uri trailerUri = Uri.parse(YOU_TUBE_VIDEO_URL + videoKey);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, trailerUri);
+        startActivity(intent);
+    }
+
     private void showMovieDataView() {
         /* First, make sure the error is invisible */
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
@@ -341,17 +347,6 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         mReviewRecyclerView.setVisibility(View.INVISIBLE);
         /* Then, show the error */
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
-    }
-
-
-    @Override
-    public void onClick(Trailer trailerClicked) {
-
-        String videoKey = trailerClicked.getKey();
-        Uri trailerUri = Uri.parse(YOU_TUBE_VIDEO_URL + videoKey);
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, trailerUri);
-        startActivity(intent);
     }
 
 }
