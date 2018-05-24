@@ -55,6 +55,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     private static final int REVIEW_LOADER_ID = 21;
     private static final int TRAILER_LOADER_ID = 31;
 
+    private static final String DETAILS_KEY = "MovieItem_parcel";
+
     private MovieItem mCurrentMovieItem;
 
     RecyclerView mReviewRecyclerView;
@@ -89,7 +91,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
         Intent intentThatStartedThisActivity = getIntent();
 
-        mCurrentMovieItem = intentThatStartedThisActivity.getParcelableExtra("MovieItem");
+        mCurrentMovieItem = intentThatStartedThisActivity.getParcelableExtra(DETAILS_KEY);
 
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         mDetailBinding.movieTitle.setText(mCurrentMovieItem.getMovieTitle());

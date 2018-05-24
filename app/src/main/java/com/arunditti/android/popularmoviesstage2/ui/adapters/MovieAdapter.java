@@ -11,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arunditti.android.popularmoviesstage2.R;
+import com.arunditti.android.popularmoviesstage2.data.FavoritesContract;
+import com.arunditti.android.popularmoviesstage2.data.FavoritesContract.FavoriteEntry;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
+import com.arunditti.android.popularmoviesstage2.ui.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -52,6 +55,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     @Override
     public void onBindViewHolder(final MovieAdapterViewHolder holder, int position) {
 
+        //Move the cursor to the appropriate position
+//       if(!mCursor.moveToPosition(position));
+//       return;
+
+     //   mCursor.moveToPosition(position);
+//        String movieTitle = mCursor.getString(MainActivity.INDEX_MOVIE_TITLE);
+//        holder.movieName.setText(movieTitle);
+//
+//        String movieImagePath = mCursor.getString(MainActivity.INDEX_MOVIE_IMAGE_PATH);
+//
+//        Picasso.with(mContext)
+//                .load(movieImagePath)
+//                .placeholder(R.drawable.ic_launcher_background)
+//                .error(R.drawable.ic_launcher_foreground)
+//                .fit()
+//                .into(holder.moviePoster);
+
         holder.movieName.setText(mMovieItems.get(position).mMovieTitle);
         Picasso.with(mContext)
                 .load(mMovieItems
@@ -65,6 +85,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     @Override
     public int getItemCount() {
         return this.mMovieItems.size();
+//        if (null == mCursor) return 0;
+//        return mCursor.getCount();
     }
 
     //Create a class within MovieAdapter  called MovieAdapterViewHolder
