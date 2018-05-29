@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     //Create a String array containing the names of the desired data columns from our ContentProvider
-    public static final String[] MOVIE_COLUMNS = {
+    public static final String[] FAVORITE_MOVIE_COLUMNS = {
             FavoriteEntry._ID,
             FavoriteEntry.COLUMN_MOVIE_ID,
             FavoriteEntry.COLUMN_MOVIE_TITLE,
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
         setupSharedPreferences();
     }
 
-
+//
 //    private LoaderManager.LoaderCallbacks<ArrayList<MovieItem>> mPopularAndTopMovieLoader = new LoaderCallbacks<ArrayList<MovieItem>>() {
 //
 //    @Override
@@ -154,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 //
 //                mSortBy = setupSharedPreferences();
 //
-//              // if(!mSortBy.equals(R.string.pref_sort_by_favorite_value)) {
 //                    Log.d(LOG_TAG, "movieQuery is: " + mSortBy);
 //
 //                    URL MovieRequestUrl = NetworkUtils.buildUrl(mSortBy);
@@ -167,12 +166,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 //                        e.printStackTrace();
 //                        return null;
 //                    }
-//
-////                } else {
-////                    fetchFavoriteMovies();
-////
-////                }
-//                //return mMovieData;
 //
 //            }
 //
@@ -238,13 +231,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 
         if (sortBy.equals(getString(R.string.pref_sort_by_favorite_value))) {
             // Load data from the database
-
             //fetchFavoriteMovies();
             getSupportLoaderManager().restartLoader(FAVORITE_LOADER_ID, null, MainActivity.this);
 
         } else {
             getSupportLoaderManager().destroyLoader(FAVORITE_LOADER_ID);
             new FetchMoviesTask().execute(sortBy);
+            //getSupportLoaderManager().restartLoader(MOVIE_LOADER_ID, null, mPopularAndTopMovieLoader);
 
         }
 
@@ -303,7 +296,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 
     }
 
-
         public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieItem>> {
 
         @Override
@@ -351,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
 
                 return new CursorLoader(MainActivity.this,
                     favoriteUri,
-                    MOVIE_COLUMNS,
+                        FAVORITE_MOVIE_COLUMNS,
                     null,
                     null,
                     null);
@@ -377,7 +369,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapterOnCli
             showMovieDataView();
 
         ArrayList<MovieItem> movieItems = new ArrayList<MovieItem>();
-        data.moveToPosition(-1);
+        //data.moveToPosition(-1);
+        data.moveToFirst();
 
         while (data.moveToNext()) {
 

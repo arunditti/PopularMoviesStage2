@@ -18,8 +18,6 @@ public class MovieItem implements Parcelable {
     public String mRating;
     public String mImagePath;
     public String mBackdropPath;
-    public String mReview;
-    public String mTrailerPath;
 
     public MovieItem(String id, String title, String releaseDate, String movieOverview, String rating, String imagePath, String backdropPath) {
         this.movieId = id;
@@ -39,8 +37,6 @@ public class MovieItem implements Parcelable {
         mImagePath = in.readString();
         mRating = in.readString();
         mBackdropPath = in.readString();
-        mReview = in.readString();
-        mTrailerPath = in.readString();
     }
 
     public MovieItem() {
@@ -65,8 +61,6 @@ public class MovieItem implements Parcelable {
         dest.writeString(mImagePath);
         dest.writeString(mRating);
         dest.writeString(mBackdropPath);
-        dest.writeString(mReview);
-        dest.writeString(mTrailerPath);
     }
 
     public static final Parcelable.Creator<MovieItem> CREATOR = new Parcelable.Creator<MovieItem>() {
@@ -85,72 +79,57 @@ public class MovieItem implements Parcelable {
         return movieId;
     }
 
-    public void setMovieId(String id) {
-        this.movieId = id;
-    }
+//    public void setMovieId(String id) {
+//        this.movieId = id;
+//    }
 
     public String getMovieTitle() {
         return mMovieTitle;
     }
 
-    public void setmMovieTitle(String title) {
-        this.mMovieTitle = title;
-    }
+//    public void setmMovieTitle(String title) {
+//        this.mMovieTitle = title;
+//    }
 
     public String getmMovieReleaseDate() {
         return mMovieReleaseDate;
     }
 
-    public void setmMovieReleaseDate(String releaseDate) {
-        this.mMovieReleaseDate = releaseDate;
-    }
+//    public void setmMovieReleaseDate(String releaseDate) {
+//        this.mMovieReleaseDate = releaseDate;
+//    }
 
     public String getmOverview() {
         return mOverview;
     }
 
-    public void setmOverview(String overview) {
-        this.mOverview = overview;
-    }
+//    public void setmOverview(String overview) {
+//        this.mOverview = overview;
+//    }
 
     public String getmImagePath() {
         return mImagePath;
     }
 
-    public void setmImagePath (String imagePath) {
-        this.mImagePath = imagePath;
-    }
+//    public void setmImagePath (String imagePath) {
+//        this.mImagePath = imagePath;
+//    }
 
     public String getmRating() {
         return mRating;
     }
 
-    public void setmRating (String rating) {
-        this.mRating = rating;
-    }
+    //public void setmRating (String rating) {
+//        this.mRating = rating;
+//    }
 
     public String getBackdropPath() {
         return mBackdropPath;
     }
 
-    public void setmBackdropPath (String backdropPath) {
-        this.mBackdropPath = backdropPath;
-    }
+//    public void setmBackdropPath (String backdropPath) {
+//        this.mBackdropPath = backdropPath;
+//    }
 
-    public String getmReview() {
-        return mReview;
-    }
-
-    public void setmReview(String review) {
-        this.mReview = review;
-    }
-
-    public String getmTrailerPath() {
-        return mTrailerPath;
-    }
-
-    public void setmTrailerPath(String trailerPath) {
-        this.mTrailerPath = trailerPath;
-    }
 
 }

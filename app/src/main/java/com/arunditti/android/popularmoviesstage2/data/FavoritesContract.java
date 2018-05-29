@@ -38,6 +38,7 @@ public class FavoritesContract {
         public static final String COLUMN_MOVIE_POPULARITY = "popular";
         public static final String COLUMN_MOVIE_RATING = "movie_rating";
         public static final String COLUMN_MOVIE_IMAGE_PATH = "movie_image_path";
+        public static final String COLUMN_MOVIE_BACKDROP_PATH = "movie_backdrop_path";
 
     }
 

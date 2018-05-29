@@ -32,6 +32,7 @@ import com.arunditti.android.popularmoviesstage2.data.FavoritesContract;
 import com.arunditti.android.popularmoviesstage2.data.FavoritesContract.FavoriteEntry;
 import com.arunditti.android.popularmoviesstage2.data.FavoritesDbHelper;
 import com.arunditti.android.popularmoviesstage2.databinding.ActivityDetailBinding;
+import com.arunditti.android.popularmoviesstage2.ui.loaders.ReviewLoader;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
 import com.arunditti.android.popularmoviesstage2.model.Review;
 import com.arunditti.android.popularmoviesstage2.model.Trailer;
@@ -104,6 +105,10 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Picasso.with(this)
                 .load(mCurrentMovieItem.getmImagePath())
                 .into(mDetailBinding.movieImage);
+
+        Picasso.with(this)
+                .load(mCurrentMovieItem.getBackdropPath())
+                .into(mDetailBinding.movieImageBackdropPath);
 
         mReviewRecyclerView = mDetailBinding.rvReviews;
         LinearLayoutManager mLinearLayoutManagerForReviews = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -210,6 +215,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         @Override
         public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
             Log.i(LOG_TAG, "onCreateLoader is called");
+
+            //return new ReviewLoader(DetailActivity.this);
 
             return new AsyncTaskLoader<ArrayList<Review>>(getApplicationContext()) {
 

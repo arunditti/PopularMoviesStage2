@@ -32,7 +32,8 @@ public class JsonUtils {
         final String PMD_OVERVIEW = "overview";
         final String PMD_RATING = "vote_average";
         final String PMD_RELEASE_DATE = "release_date";
-        final String PMD_PICTURE_SIZE = "w185";
+        final String PMD_PICTURE_SIZE = "w342";
+        final String PMD_BACKDROP_PICTURE_SIZE = "w500";
 
         JSONObject PopularMoviesJson = new JSONObject(PopularMoviesJsonStr);
         JSONArray moviesArray = PopularMoviesJson.getJSONArray(PMD_LIST);
@@ -42,7 +43,7 @@ public class JsonUtils {
         movieItems.clear();
         for (int i = 0; i < moviesArray.length(); i++) {
             JSONObject popularMovies = moviesArray.getJSONObject(i);
-            MovieItem movieItem = new MovieItem();
+            //MovieItem movieItem = new MovieItem();
 
             String movieId = popularMovies.getString(PMD_ID);
             String title = popularMovies.getString(PMD_TITLE);
@@ -50,26 +51,8 @@ public class JsonUtils {
             String movieOverview = popularMovies.getString(PMD_OVERVIEW);
             String rating = popularMovies.getString(PMD_RATING);
             String imagePath = PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
-            String backdropPath = PMD_BACKDROP_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
+            String backdropPath = PMD_PICTURE_PATH + PMD_BACKDROP_PICTURE_SIZE + popularMovies.getString(PMD_BACKDROP_PATH);
            movieItems.add(new MovieItem(movieId, title, releaseDate, movieOverview, rating, imagePath, backdropPath));
-
-//            movieItem.setMovieId(movieId);
-//            movieItem.setmMovieTitle(title);
-//            movieItem.setmMovieReleaseDate(releaseDate);
-//            movieItem.setmOverview(movieOverview);
-//            movieItem.setmRating(rating);
-//            movieItem.setmImagePath(imagePath);
-//            movieItem.setmBackdropPath(backdropPath);
-//
-////           // movieItem.setMovieId(popularMovies.getString(PMD_ID));
-////            movieItem.setmMovieTitle(popularMovies.getString(PMD_TITLE));
-////            movieItem.setmMovieReleaseDate(popularMovies.getString(PMD_RELEASE_DATE));
-////            movieItem.setmOverview(popularMovies.getString(PMD_OVERVIEW));
-////            movieItem.setmRating(popularMovies.getString(PMD_RATING));
-////            movieItem.setmImagePath(PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER));
-////            movieItem.setmBackdropPath(popularMovies.getString(PMD_ID));
-//
-//            movieItems.add(movieItem);
 
         }
         return movieItems;

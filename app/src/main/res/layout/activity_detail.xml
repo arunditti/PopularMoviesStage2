@@ -42,6 +42,13 @@
                 app:cardCornerRadius="3dp"
                 app:cardUseCompatPadding="true">
 
+                <ImageView
+                    android:id="@+id/movie_image_backdrop_path"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop" />
+
                 <TextView
                     android:id="@+id/movie_title"
                     android:layout_width="wrap_content"
@@ -49,11 +56,10 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:paddingBottom="16dp" />
 
-
                 <ScrollView
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="150dp"
                     >
 
                 <LinearLayout
