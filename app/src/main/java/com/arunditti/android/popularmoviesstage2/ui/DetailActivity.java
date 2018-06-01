@@ -1,18 +1,14 @@
 package com.arunditti.android.popularmoviesstage2.ui;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -22,15 +18,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arunditti.android.popularmoviesstage2.R;
-import com.arunditti.android.popularmoviesstage2.data.FavoritesContract;
 import com.arunditti.android.popularmoviesstage2.data.FavoritesContract.FavoriteEntry;
-import com.arunditti.android.popularmoviesstage2.data.FavoritesDbHelper;
 import com.arunditti.android.popularmoviesstage2.databinding.ActivityDetailBinding;
 import com.arunditti.android.popularmoviesstage2.ui.loaders.ReviewLoader;
 import com.arunditti.android.popularmoviesstage2.model.MovieItem;
@@ -38,12 +31,9 @@ import com.arunditti.android.popularmoviesstage2.model.Review;
 import com.arunditti.android.popularmoviesstage2.model.Trailer;
 import com.arunditti.android.popularmoviesstage2.ui.adapters.ReviewAdapter;
 import com.arunditti.android.popularmoviesstage2.ui.adapters.TrailerAdapter;
-import com.arunditti.android.popularmoviesstage2.utils.JsonUtils;
-import com.arunditti.android.popularmoviesstage2.utils.MoviePreferences;
-import com.arunditti.android.popularmoviesstage2.utils.NetworkUtils;
+import com.arunditti.android.popularmoviesstage2.ui.loaders.TrailerLoader;
 import com.squareup.picasso.Picasso;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -78,6 +68,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
 
     ArrayList<Review> mReviewItems = new ArrayList<Review>();
     ArrayList<Trailer> mTrailerItems = new ArrayList<Trailer>();
+    String mMovieId;
 
     //Declare an ActivityDetailBinding field called mDetailBinding
     private ActivityDetailBinding mDetailBinding;
@@ -93,6 +84,8 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         Intent intentThatStartedThisActivity = getIntent();
 
         mCurrentMovieItem = intentThatStartedThisActivity.getParcelableExtra(DETAILS_KEY);
+
+        mMovieId = mCurrentMovieItem.getItemId();
 
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         mDetailBinding.movieTitle.setText(mCurrentMovieItem.getMovieTitle());
@@ -216,44 +209,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         public Loader<ArrayList<Review>> onCreateLoader(int id, Bundle args) {
             Log.i(LOG_TAG, "onCreateLoader is called");
 
-            //return new ReviewLoader(DetailActivity.this);
-
-            return new AsyncTaskLoader<ArrayList<Review>>(getApplicationContext()) {
-
-                ArrayList<Review> mReviewData = null;
-
-                @Override
-                protected void onStartLoading() {
-                    if (mReviewData != null) {
-                        deliverResult(mReviewData);
-                    } else {
-
-                        forceLoad();
-                    }
-                }
-
-                @Override
-                public ArrayList<Review> loadInBackground() {
-
-                    String movieId = mCurrentMovieItem.getItemId();
-                    Log.d(LOG_TAG, "Movie ID is : " + movieId);
-                    URL ReviewRequestUrl = NetworkUtils.buildReviewUrl(movieId);
-
-                    try {
-                        String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(ReviewRequestUrl);
-                        ArrayList<Review> simpleJsonMovieData = JsonUtils.getMovieReviewsDataFromJson(jsonMovieResponse);
-                        return simpleJsonMovieData;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                public void deliverResult(ArrayList<Review> data) {
-                    mReviewData = data;
-                    super.deliverResult(data);
-                }
-            };
+            return new ReviewLoader(DetailActivity.this, mMovieId);
         }
 
         @Override
@@ -279,42 +235,7 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
         public Loader<ArrayList<Trailer>> onCreateLoader(int id, Bundle args) {
             Log.i(LOG_TAG, "onCreateLoader is called");
 
-            return new AsyncTaskLoader<ArrayList<Trailer>>(getApplicationContext()) {
-
-                ArrayList<Trailer> mTrailerData = null;
-
-                @Override
-                protected void onStartLoading() {
-                    if (mTrailerData != null) {
-                        deliverResult(mTrailerData);
-                    } else {
-
-                        forceLoad();
-                    }
-                }
-
-                @Override
-                public ArrayList<Trailer> loadInBackground() {
-
-                    String movieId = mCurrentMovieItem.getItemId();
-                    Log.d(LOG_TAG, "Movie ID is : " + movieId);
-                    URL TrailerRequestUrl = NetworkUtils.buildTrailerUrl(movieId);
-
-                    try {
-                        String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(TrailerRequestUrl);
-                        ArrayList<Trailer> simpleJsonMovieData = JsonUtils.getMovieTrailersDataFromJson(jsonMovieResponse);
-                        return simpleJsonMovieData;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                public void deliverResult(ArrayList<Trailer> data) {
-                    mTrailerData = data;
-                    super.deliverResult(data);
-                }
-            };
+            return new TrailerLoader(DetailActivity.this, mMovieId);
         }
 
         @Override

@@ -3,14 +3,8 @@ package com.arunditti.android.popularmoviesstage2.ui.loaders;
 import android.content.Context;
 import android.util.Log;
 
-
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
-import android.content.Intent;
 
-import com.arunditti.android.popularmoviesstage2.model.MovieItem;
 import com.arunditti.android.popularmoviesstage2.model.Review;
 import com.arunditti.android.popularmoviesstage2.utils.JsonUtils;
 import com.arunditti.android.popularmoviesstage2.utils.NetworkUtils;
@@ -26,12 +20,11 @@ public class ReviewLoader extends AsyncTaskLoader<ArrayList<Review>>{
 
     private static final String LOG_TAG = ReviewLoader.class.getSimpleName();
 
-    private MovieItem mCurrentMovieItem;
+    private String mMovieId;
 
-    ArrayList<Review> mReviewItems = new ArrayList<Review>();
-
-    public ReviewLoader(Context context) {
+    public ReviewLoader(Context context, String id) {
         super(context);
+        mMovieId = id;
     }
 
     ArrayList<Review> mReviewData = null;
@@ -49,9 +42,8 @@ public class ReviewLoader extends AsyncTaskLoader<ArrayList<Review>>{
     @Override
     public ArrayList<Review> loadInBackground() {
 
-            String movieId = mCurrentMovieItem.getItemId();
-            Log.d(LOG_TAG, "Movie ID is : " + movieId);
-            URL ReviewRequestUrl = NetworkUtils.buildReviewUrl(movieId);
+            Log.d(LOG_TAG, "Movie ID is : " + mMovieId);
+            URL ReviewRequestUrl = NetworkUtils.buildReviewUrl(mMovieId);
 
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(ReviewRequestUrl);

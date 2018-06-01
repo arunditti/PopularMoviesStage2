@@ -19,28 +19,8 @@ public class FavoritesContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
 
     //Define the possible paths for accessing data in the contract
-    public static final String PATH_MOVIES = "movies";
     public static final String PATH_FAVORITES = "favorites";
 
-    public static final class MovieEntry implements BaseColumns {
-
-        //Movie content URI
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
-
-        //Movies table name
-        public static final String TABLE_NAME = "movies";
-
-        //Movies column names
-        public static final String COLUMN_MOVIE_ID = "movie_id";
-        public static final String COLUMN_MOVIE_TITLE = "movie_title";
-        public static final String COLUMN_MOVIE_RELEASE_DATE = "movie_release_date";
-        public static final String COLUMN_MOVIE_OVERVIEW = "overview";
-        public static final String COLUMN_MOVIE_POPULARITY = "popular";
-        public static final String COLUMN_MOVIE_RATING = "movie_rating";
-        public static final String COLUMN_MOVIE_IMAGE_PATH = "movie_image_path";
-        public static final String COLUMN_MOVIE_BACKDROP_PATH = "movie_backdrop_path";
-
-    }
 
     //FavoriteEntry is an inner class that defines the contents of the favorites table
     public static final class FavoriteEntry implements BaseColumns {

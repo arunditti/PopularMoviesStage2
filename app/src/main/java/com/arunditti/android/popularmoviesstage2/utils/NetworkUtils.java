@@ -45,7 +45,7 @@ public class NetworkUtils {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendPath(movieId)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
-                .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "reviews")
+                .appendPath("reviews")
                 .build();
         URL url = null;
         try {
@@ -62,7 +62,7 @@ public class NetworkUtils {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendPath(movieId)
                 .appendQueryParameter(API_KEY, BuildConfig.PICASSO_API_KEY)
-                .appendQueryParameter(APPEND_TO_RESPONSE_PARAM, "videos")
+                .appendPath("videos")
                 .build();
         URL url = null;
         try {

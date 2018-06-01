@@ -39,11 +39,9 @@ public class JsonUtils {
         JSONArray moviesArray = PopularMoviesJson.getJSONArray(PMD_LIST);
         ArrayList<MovieItem> movieItems = new ArrayList<MovieItem>();
 
-        //movieItems = new ArrayList<MovieItem>();
         movieItems.clear();
         for (int i = 0; i < moviesArray.length(); i++) {
             JSONObject popularMovies = moviesArray.getJSONObject(i);
-            //MovieItem movieItem = new MovieItem();
 
             String movieId = popularMovies.getString(PMD_ID);
             String title = popularMovies.getString(PMD_TITLE);
@@ -69,9 +67,8 @@ public class JsonUtils {
         final String REVIEW_CONTENT = "content";
         final String REVIEW_URL = "url";
 
-        JSONObject ReviewJson = new JSONObject(reviewsJsonStr);
-        JSONObject reviewDataJson = ReviewJson.getJSONObject("reviews");
-        JSONArray reviewArray = reviewDataJson.getJSONArray(REVIEW_LIST);
+        JSONObject reviewJson = new JSONObject(reviewsJsonStr);
+        JSONArray reviewArray = reviewJson.getJSONArray(REVIEW_LIST);
         ArrayList<Review> reviewItems = new ArrayList<Review>();
 
         reviewItems.clear();
@@ -97,12 +94,11 @@ public class JsonUtils {
         final String TRAILER_KEY = "key";
         final String TRAILER_NAME = "name";
 
-        ArrayList<Trailer> resultMovieTrailers = new ArrayList<Trailer>();
         JSONObject TrailerJson = new JSONObject(TrailerJsonStr);
-        JSONObject TrailerDataJson = TrailerJson.getJSONObject(TRAILER_VIDEOS);
-        JSONArray trailersArray = TrailerDataJson.getJSONArray(TRAILER_RESULTS);
+        JSONArray trailersArray = TrailerJson.getJSONArray(TRAILER_RESULTS);
+        ArrayList<Trailer> trailerItems = new ArrayList<Trailer>();
 
-        resultMovieTrailers.clear();
+        trailerItems.clear();
         for (int i = 0; i < trailersArray.length(); i++) {
             JSONObject movieTrailerJson = trailersArray.getJSONObject(i);
             String id = movieTrailerJson.getString(MOVIE_ID);
@@ -110,10 +106,10 @@ public class JsonUtils {
             String name = movieTrailerJson.getString(TRAILER_NAME);
             String site = movieTrailerJson.getString("site");
             Trailer mT = new Trailer(id, key, name, site);
-            resultMovieTrailers.add(mT);
+            trailerItems.add(mT);
         }
 
-        return resultMovieTrailers;
+        return trailerItems;
 
     }
 
