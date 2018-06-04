@@ -14,15 +14,15 @@
                 android:id="@+id/detail_error_message_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/text_padding"
                 android:text="@string/error_message"
                 android:textSize="@dimen/text_size"
                 android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/detail_loading_indicator"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="@dimen/progress_bar_width"
+                android:layout_height="@dimen/progress_bar_height"
                 android:layout_gravity="center"
                 android:visibility="invisible" />
 
@@ -73,7 +73,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:paddingTop="32dp">
+                                android:paddingTop="@dimen/linear_layout_padding_top">
 
                             <TextView
                                 android:id="@+id/movie_release_date_label"

@@ -43,13 +43,15 @@ public class JsonUtils {
         for (int i = 0; i < moviesArray.length(); i++) {
             JSONObject popularMovies = moviesArray.getJSONObject(i);
 
-            String movieId = popularMovies.getString(PMD_ID);
-            String title = popularMovies.getString(PMD_TITLE);
-            String releaseDate = popularMovies.getString(PMD_RELEASE_DATE);
-            String movieOverview = popularMovies.getString(PMD_OVERVIEW);
-            String rating = popularMovies.getString(PMD_RATING);
-            String imagePath = PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.getString(PMD_POSTER);
-            String backdropPath = PMD_PICTURE_PATH + PMD_BACKDROP_PICTURE_SIZE + popularMovies.getString(PMD_BACKDROP_PATH);
+            String movieId = popularMovies.optString(PMD_ID);
+            String title = popularMovies.optString(PMD_TITLE);
+            String releaseDate = popularMovies.optString(PMD_RELEASE_DATE);
+            String movieOverview = popularMovies.optString(PMD_OVERVIEW);
+            String rating = popularMovies.optString(PMD_RATING);
+            String imagePath = PMD_PICTURE_PATH + PMD_PICTURE_SIZE + popularMovies.optString(PMD_POSTER);
+            String backdropPath = PMD_PICTURE_PATH + PMD_BACKDROP_PICTURE_SIZE + popularMovies.optString(PMD_BACKDROP_PATH);
+
+
            movieItems.add(new MovieItem(movieId, title, releaseDate, movieOverview, rating, imagePath, backdropPath));
 
         }
@@ -74,10 +76,10 @@ public class JsonUtils {
         reviewItems.clear();
         for (int i = 0; i < reviewArray.length(); i++) {
             JSONObject reviewMovies = reviewArray.getJSONObject(i);
-            String reviewId = reviewMovies.getString(REVIEW_ID);
-            String reviewAuthor = reviewMovies.getString(REVIEW_AUTHOR);
-            String reviewContent = reviewMovies.getString(REVIEW_CONTENT);
-            String reviewUrl = reviewMovies.getString(REVIEW_URL);
+            String reviewId = reviewMovies.optString(REVIEW_ID);
+            String reviewAuthor = reviewMovies.optString(REVIEW_AUTHOR);
+            String reviewContent = reviewMovies.optString(REVIEW_CONTENT);
+            String reviewUrl = reviewMovies.optString(REVIEW_URL);
             reviewItems.add(new Review(reviewId, reviewAuthor, reviewContent, reviewUrl));
         }
 
@@ -101,10 +103,10 @@ public class JsonUtils {
         trailerItems.clear();
         for (int i = 0; i < trailersArray.length(); i++) {
             JSONObject movieTrailerJson = trailersArray.getJSONObject(i);
-            String id = movieTrailerJson.getString(MOVIE_ID);
-            String key = movieTrailerJson.getString(TRAILER_KEY);
-            String name = movieTrailerJson.getString(TRAILER_NAME);
-            String site = movieTrailerJson.getString("site");
+            String id = movieTrailerJson.optString(MOVIE_ID);
+            String key = movieTrailerJson.optString(TRAILER_KEY);
+            String name = movieTrailerJson.optString(TRAILER_NAME);
+            String site = movieTrailerJson.optString("site");
             Trailer mT = new Trailer(id, key, name, site);
             trailerItems.add(mT);
         }
