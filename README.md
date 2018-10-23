@@ -3,7 +3,7 @@ Created as part of Udacity's Android Developer Nanodegree course by Google
 # Project Description
 Popular Movies App is an app to list the popular movies in the form of a grid view. When a movie is clicked, it displays movie details, its trailers and reviews. User can mark the movie favorite from the detail screen and all the movies marked as favorite are stored in the SQLite Database. User can change the list of movies from the Settings menu by selecting Most Polular, Top Rated or Favorites.
 
-The app uses TMDb API to get the list of movies.
+The app uses TMDb API to get the list of movies. In order to run the app, the user will need to get API key from themoviedb.org and enter that key in gradle.properties file MyPicassoApiKey="Enter Your API key here".
 # Screenshots
 ![layer 0-12](https://user-images.githubusercontent.com/8518978/47375583-9cf17400-d6be-11e8-966b-3a534a21f64f.png)
 ![layer 0-13](https://user-images.githubusercontent.com/8518978/47375586-9ebb3780-d6be-11e8-8b47-686000d582b3.png)
